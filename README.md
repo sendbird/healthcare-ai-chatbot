@@ -8,7 +8,7 @@
 This demo app showcases what AI Chatbots with Sendbird can do to enhance the customer experience of your service with more personalized and comprehensive customer support.
 Utilizing OpenAI’s GPT3.5 and its Function Calling functionality, ***Sendbird helps you build a chatbot that can go extra miles: providing informative responses with the data source you feed to the bot, accommodating customer’s requests such as retrieving reservation information and making a reservation and even talking to the doctor.*** Create your own next generation AI Chatbot by following the tutorial below.
 
-![final_output](https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/f191c66a-2642-4269-ab92-a3567da618aa)
+![healthcare](https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/de8ed248-d53e-4750-8d8d-aa22ed6b5b20)
 
 ## Prerequisites
 1. [Sendbird Account](https://dashboard.sendbird.com/)
@@ -26,13 +26,15 @@ Utilizing OpenAI’s GPT3.5 and its Function Calling functionality, ***Sendbird 
 
     And from now on, the person you're speaking to is named John Doe, and the patient ID is P12345.
     ```
+    <img width="474" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/e35775fe-ef8e-43c8-bac4-4bc2248248a9">
+
 
 ## How to open the demo app
 1. Open Xcode Demo project
 ```shell
 open Sample/QuickStart.xcodeproj
 ```
-2. Set the `applicationId` and `botId` in [`AppDelegate.swift`](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sample/QuickStart/AppDelegate.swift#L13-L23)
+2. Set the `applicationId` and `botId` in [`AppDelegate.swift`](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sample/QuickStart/AppDelegate.swift#L13-L14)
 ```swift
 static let botId: String = <#botId: String#>
 static let applicationId: String = <#applicationId: String#>
@@ -51,7 +53,7 @@ static let applicationId: String = <#applicationId: String#>
 This demo app demonstrates the implementation of the AI Chatbot tailored for healthcare. It includes functionalities such as ***recommend date to reservation, reservation, Talking to the doctor.*** By leveraging ChatGPT’s new feature [Function Calling](https://openai.com/blog/function-calling-and-other-api-updates), the Chatbot now can make an API request to the 3rd party with a predefined Function Calling based on customer’s enquiry. Then it parses and presents the response in a conversational manner, enhancing overall customer experience.
 
 ## How it works
-<img width="2556" alt="image" src="https://github.com/sendbird/sendbird-uikit-ios/assets/104121286/12a8cb5f-8127-41cb-9570-3c979f977ad4">
+<img width="2533" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/e20eb8da-9f62-4c03-b95f-2d1a3f9daef7">
 
 1. A customer sends a message containing a specific request on the client app to the Sendbird server.
 2. The Sendbird server then delivers the message to Chat GPT.
@@ -84,7 +86,7 @@ And `ai_attrs` value will be stored in the `messageParams.data` property in `str
    - `description`: the description about the Function Calling request. It can detail when to call the function and what action to be taken. Chat GPT will use this information to analyze the customer’s message and determine whether to call the function or not.
    - `parameter`: This contains a list of arguments required for the Function Calling.
 
-[SBUBaseChannelViewModel.swift](https://github.com/sendbird/ecommerce-ai-chatbot/blob/develop/Sources/ViewModel/Channel/SBUBaseChannelViewModel.swift#L221)
+[SBUBaseChannelViewModel.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/ViewModel/Channel/SBUBaseChannelViewModel.swift#L221)
 ```swift
 let data = """
     {
@@ -248,8 +250,7 @@ let data = """
 ```
 
 ## Welcome Message and Quick Replies
-<img width="380" alt="image" src="https://github.com/sendbird/sendbird-uikit-ios/assets/104121286/a4c69ccc-a2f9-4c47-8f7a-16f452fc67d9">
-
+<img width="387" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/40b3d20d-f8e6-44b4-889f-e7b39758b901">
 
 The following is a prompt sample of `first_message_data` in `json` format. The object contains two pieces of information: `message` and `data`. The string value in message will act as a Welcome Message while values in `data` represent the Quick Replies that the customer can choose from. The keys and values in the prompt will be stored in the `channelCreateParams.data` property in `string`.
 
@@ -258,7 +259,7 @@ The following is a prompt sample of `first_message_data` in `json` format. The o
    - `options`: this contains a list of Quick Reply messages. A customer can choose a predefined item from the list, which enhances the clarity of the customer’s request and thus helps the AI Chatbot understand their intention.
  - `message`: this is a Welcome Message to greet a customer when they open a channel and initiate conversation with an AI ChatBot. 
 
-[SBUCreateChannelViewModel.swift](https://github.com/sendbird/ecommerce-ai-chatbot/blob/develop/Sources/ViewModel/SelectUser/CreateChannel/SBUCreateChannelViewModel.swift#L223)
+[SBUCreateChannelViewModel.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/ViewModel/SelectUser/CreateChannel/SBUCreateChannelViewModel.swift#L223)
 ```swift
 let data: [String: Any] = [
     "first_message_data": [
@@ -293,7 +294,7 @@ do {
 ### CardView
 The `data` in the response are displayed in a Card view. In the demo, information such as order items and their delivery status can be displayed in a card with an image, title, and description. Customization of the view can be done through `cardViewParamsCollectionBuilder` and `SBUCardViewParams`. The following codes show how to set the Card view of order status.
 
-[SBUUserMessageCell.swift](https://github.com/sendbird/ecommerce-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L171)
+[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L178)
 ```swift
 // MARK: Card List
 if let cardListView = self.cardListView {
@@ -363,7 +364,7 @@ if functionResponse.type != .null {
 ### QuickReplyView
 The following codes demonstrate how to set the view for Quick Replies. The values in `options` of `first_message_data.data` are used as Quick Replies.
 
-[SBUUserMessageCell.swift](https://github.com/sendbird/ecommerce-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L161)
+[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L158)
 ```swift
 // MARK: Quick Reply        
 if let quickReplyView = self.quickReplyView {
@@ -377,11 +378,11 @@ if let replyOptions = message.quickReply?.options, !replyOptions.isEmpty {
 ```
 
 ### ButtonView
-The following codes demonstrate how to set the view for Buttons. When the server returns a response that includes the information of adding a button to call the action, by setting the `buttonViewParamsBuilder`, the button is displayed in the message. The following codes show how to set the Button view of the doctor reservation.
+The following codes demonstrate how to set the view for Buttons. When the server returns a response that includes the information of adding a button to call the action, by setting the `SBUButtonViewParams` and `updateButtonView(with: buttonParams)`, the button is displayed in the message. The following codes show how to set the Button view of the doctor reservation.
 
-[SBUUserMessageCell.swift](https://github.com/sendbird/ecommerce-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L161)
+[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L173)
 ```swift
-// MARK: ButtonBiew
+// MARK: ButtonView
 if let buttonView = self.buttonView {
     self.contentVStackView.removeArrangedSubview(buttonView)
 }
