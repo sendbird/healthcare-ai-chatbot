@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: healthcare-ai-chatbot
+  description: This is a demo project for Healthcare AI Chatbot
+  annotations:
+    github.com/project-slug: sendbird/healthcare-ai-chatbot
+spec:
+  type: library
+  lifecycle: production
+  owner: dep-client-platform
+  system: sendbird-uikit
