@@ -86,6 +86,8 @@ And `ai_attrs` value will be stored in the `messageParams.data` property in `str
    - `description`: the description about the Function Calling request. It can detail when to call the function and what action to be taken. Chat GPT will use this information to analyze the customer’s message and determine whether to call the function or not.
    - `parameter`: This contains a list of arguments required for the Function Calling.
 
+Mock API Server Information: [Link](https://documenter.getpostman.com/view/21816899/2s9Xy3qqFd)
+
 [SBUBaseChannelViewModel.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/ViewModel/Channel/SBUBaseChannelViewModel.swift#L221)
 ```swift
 let data = """
