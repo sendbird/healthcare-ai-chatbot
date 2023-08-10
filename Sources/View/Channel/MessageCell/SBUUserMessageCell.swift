@@ -170,7 +170,7 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
             self.updateQuickReplyView(with: replyOptions)
         }
         
-        // MARK: ButtonBiew
+        // MARK: ButtonView
         if let buttonView = self.buttonView {
             self.contentVStackView.removeArrangedSubview(buttonView)
         }
