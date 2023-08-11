@@ -27,8 +27,7 @@ Utilizing OpenAI’s GPT3.5 and its Function Calling functionality, ***Sendbird 
    
    And from now on, the person you're speaking to is named John Doe, and the patient ID is P12345.
     ```
-    <img width="459" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/4d946dbc-bf64-49c5-8257-4bff9094b6cf">
-
+    <img width="449" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/934e0b42-5475-44f4-a767-b472d4efe150">
 
 
 ## How to open the demo app
