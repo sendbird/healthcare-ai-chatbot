@@ -8,7 +8,7 @@
 This demo app showcases what AI Chatbots with Sendbird can do to enhance the customer experience of your service with more personalized and comprehensive customer support.
 Utilizing OpenAI’s GPT3.5 and its Function Calling functionality, ***Sendbird helps you build a chatbot that can go extra miles: providing informative responses with the data source you feed to the bot, accommodating customer’s requests such as retrieving reservation information and making a reservation and even talking to the doctor.*** Create your own next generation AI Chatbot by following the tutorial below.
 
-![healthcare](https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/de8ed248-d53e-4750-8d8d-aa22ed6b5b20)
+![healthcare](https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/04d71cea-8044-4b70-9cd6-9de3e2d95f5b)
 
 ## Prerequisites
 1. [Sendbird Account](https://dashboard.sendbird.com/)
@@ -297,69 +297,74 @@ do {
 ### CardView
 The `data` in the response are displayed in a Card view. In the demo, information such as order items and their delivery status can be displayed in a card with an image, title, and description. Customization of the view can be done through `cardViewParamsCollectionBuilder` and `SBUCardViewParams`. The following codes show how to set the Card view of order status.
 
-[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L178)
+[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L180)
 ```swift
 // MARK: Card List
 if let cardListView = self.cardListView {
-    self.contentVStackView.removeArrangedSubview(cardListView)
+   self.contentVStackView.removeArrangedSubview(cardListView)
 }
 
-// Parse JSON from received message data
-let json = JSON(parseJSON: message.data)
 let functionResponse = json["function_response"]
 
 if functionResponse.type != .null {
-    let statusCode = functionResponse["status_code"].intValue
-    let endpoint = functionResponse["endpoint"].stringValue
-    let response = functionResponse["response"]
+   let statusCode = functionResponse["status_code"].intValue
+   let endpoint = functionResponse["endpoint"].stringValue
+   let response = functionResponse["response"]
 
-    if statusCode == 200 {        
-        if ... {
+   if statusCode == 200 {
+       if ... {
+         ...
+       } else if endpoint.contains("/reservation") {
+           // Replace the message text with the custom text
+           customText = "Your appointment has been successfully scheduled. Here are the details"
+           SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
+               guard
+                   let data = messageData.data(using: .utf8),
+                   let json = try? JSON(data: data)
+               else { return [] }
+               // Convert the single order object into a SBUCardViewParams object
+               let orderParams = SBUCardViewParams(
+                   imageURL: nil,
+                   title: "Date: \(json["appointmentDetails"]["date"].stringValue):\(json["appointmentDetails"]["time"].stringValue)",
+                   subtitle: nil,
+                   description: "- ID: \(json["appointmentDetails"]["appointmentId"].stringValue)\n- Department: \(json["appointmentDetails"]["department"].stringValue)\n- Doctor: \(json["appointmentDetails"]["doctor"].stringValue)",
+                   link: nil
+               )
 
-        } else if endpoint.contains("/reservation") {
-            // Replace the message text with the custom text
-            customText = "Your appointment has been successfully scheduled. Here are the details"
-            SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
-                guard let json = try? JSON(parseJSON: messageData) else { return [] }
-                print(json)
-                // Convert the single order object into a SBUCardViewParams object
-                let orderParams = SBUCardViewParams(
-                    imageURL: nil,
-                    title: "Date: \(json["appointmentDetails"]["date"].stringValue):\(json["appointmentDetails"]["time"].stringValue)",
-                    subtitle: nil,
-                    description: "- ID: \(json["appointmentDetails"]["appointmentId"].stringValue)\n- Department: \(json["appointmentDetails"]["department"].stringValue)\n- Doctor: \(json["appointmentDetails"]["doctor"].stringValue)",
-                    link: nil
-                )
-
-                return [orderParams]
-            }
-            if let items = try?SBUGlobalCustomParams.cardViewParamsCollectionBuilder?(response.rawString()!){
-                self.addCardListView(with: items)
-            }
-        } else if endpoint.contains("/recommend_date") {
-            // Replace the message text with the custom text
-            customText = "Here are the available appointment date and time."
-            disableWebview = true
-            SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
-                guard let json = try? JSON(parseJSON: messageData) else { return [] }
-
-                return json.arrayValue.compactMap { item in
-                    return SBUCardViewParams(
-                            imageURL: nil,
-                            title: "\(item["doctor"].stringValue)",
-                            subtitle: "Date: \(item["recommend_date"].stringValue)",
-                            description: nil,
-                            link: nil
-                    )
-                }
-            }
-            if let items = try?SBUGlobalCustomParams.cardViewParamsCollectionBuilder?(response.rawString()!){
-                self.addCardListView(with: items)
-            }
-        }
-    }
+               return [orderParams]
+           }
+           if let items = try?SBUGlobalCustomParams.cardViewParamsCollectionBuilder?(response.rawString()!){
+               self.addCardListView(with: items)
+           }
+       } else if endpoint.contains("/recommend_date") {
+           // Replace the message text with the custom text
+           customText = "Here are the available appointment date and time."
+           disableWebview = true
+           SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
+               guard
+                   let data = messageData.data(using: .utf8),
+                   let json = try? JSON(data: data)
+               else { return [] }
+               return json.arrayValue.compactMap { item in
+                   return SBUCardViewParams(
+                           imageURL: nil,
+                           title: "\(item["doctor"].stringValue)",
+                           subtitle: "Date: \(item["recommend_date"].stringValue)",
+                           description: nil,
+                           link: nil,
+                           actionHandler: {
+                               self.cardSelectHandler!("Please reserve a reservation with \(item["doctor"].stringValue), \(item["recommend_date"].stringValue)")
+                           }
+                   )
+               }
+           }
+           if let items = try?SBUGlobalCustomParams.cardViewParamsCollectionBuilder?(response.rawString()!){
+               self.addCardListView(with: items)
+           }
+       }
+   }
 } else {
-    self.cardListView = nil
+   self.cardListView = nil
 }
 
 ```
@@ -367,7 +372,7 @@ if functionResponse.type != .null {
 ### QuickReplyView
 The following codes demonstrate how to set the view for Quick Replies. The values in `options` of `first_message_data.data` are used as Quick Replies.
 
-[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L158)
+[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L160)
 ```swift
 // MARK: Quick Reply        
 if let quickReplyView = self.quickReplyView {
@@ -383,7 +388,7 @@ if let replyOptions = message.quickReply?.options, !replyOptions.isEmpty {
 ### ButtonView
 The following codes demonstrate how to set the view for Buttons. When the server returns a response that includes the information of adding a button to call the action, by setting the `SBUButtonViewParams` and `updateButtonView(with: buttonParams)`, the button is displayed in the message. The following codes show how to set the Button view of the doctor reservation.
 
-[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L173)
+[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L175)
 ```swift
 // MARK: ButtonView
 if let buttonView = self.buttonView {
@@ -399,31 +404,21 @@ if functionResponse.type != .null {
 
     if statusCode == 200 {
         if endpoint.contains("/check_availability_of_doctor_for_consultation") {
-            // Replace the message text with the custom text
-            customText = "Yes, you can talk to a doctor. "
-            
-            let buttonParams = SBUButtonViewParams(
-                actionText: "Invite a Doctor",
-                description: "If you want to talk to a doctor, please click the button!",
-                actionHandler: {
-                    self.buttonClicked = true
-
-                    // Invite a doctor
-                    self.channel?.inviteUserId("healthcare-doctor", completionHandler: { error in
-                        print("Error: \(error?.localizedDescription ?? "No error")")
-                    })
-
-                    // Ban the bot
-                    self.channel?.banUser(userId: AppDelegate.botId, seconds: 0, description: "Bot banned", completionHandler: { error in
-                        print("Error: \(error?.localizedDescription ?? "No error")")
-                    })
-
-                    self.layoutIfNeeded()
-                },
-                enableButton: !shouldHideButton && !self.buttonClicked,
-                disableButtonText: "In Progress"
-            )
-            self.updateButtonView(with: buttonParams)
+           // Replace the message text with the custom text
+           customText = "Yes, you can talk to a doctor. "
+           
+           let buttonParams = SBUButtonViewParams(
+               actionText: "Invite a Doctor",
+               description: "If you want to talk to a doctor, please click the button!",
+               actionHandler: {
+                   self.buttonClicked = true
+                   self.buttonSelectHandler!()
+                   self.layoutIfNeeded()
+               },
+               enableButton: !shouldHideButton && !self.buttonClicked,
+               disableButtonText: "In Progress"
+           )
+           self.updateButtonView(with: buttonParams)
         } 
         ...
     }
