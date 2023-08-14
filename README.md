@@ -297,6 +297,14 @@ do {
 ### CardView
 The `data` in the response are displayed in a Card view. In the demo, information such as order items and their delivery status can be displayed in a card with an image, title, and description. Customization of the view can be done through `cardViewParamsCollectionBuilder` and `SBUCardViewParams`. The following codes show how to set the Card view of order status.
 
+- `imageURL`: the URL of the image to be displayed on the card
+- `title`: the title to be displayed on the card
+- `subtitle`: the subtitle to be displayed on the card
+- `description`: the description to be displayed on the card
+- `link`: the link to be displayed on the card
+  (If actionHandler is set, link is ignored.)
+- `actionHandler`: the action to be performed when the card is clicked
+
 [SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L180)
 ```swift
 // MARK: Card List
@@ -371,6 +379,7 @@ if functionResponse.type != .null {
 
 ### QuickReplyView
 The following codes demonstrate how to set the view for Quick Replies. The values in `options` of `first_message_data.data` are used as Quick Replies.
+When the user clicks on the Quick Reply, the message is sent to the server.
 
 [SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L160)
 ```swift
@@ -387,6 +396,12 @@ if let replyOptions = message.quickReply?.options, !replyOptions.isEmpty {
 
 ### ButtonView
 The following codes demonstrate how to set the view for Buttons. When the server returns a response that includes the information of adding a button to call the action, by setting the `SBUButtonViewParams` and `updateButtonView(with: buttonParams)`, the button is displayed in the message. The following codes show how to set the Button view of the doctor reservation.
+
+- `actionText`: the text to be displayed on the button
+- `description`: the text to be displayed below the button
+- `actionHandler`: the action to be performed when the button is clicked
+- `enableButton`: whether the button is enabled or not
+- `disableButtonText`: the text to be displayed on the button when it is disabled
 
 [SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L175)
 ```swift
