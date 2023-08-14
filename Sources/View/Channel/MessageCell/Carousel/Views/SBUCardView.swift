@@ -178,8 +178,13 @@ public class SBUCardView: SBUView {
     
     public override func setupActions() {
         super.setupActions()
-        
-        if self.params?.hasLink == true {
+
+        // If there is an action handler, add tap gesture to the view.
+        // If there is a link, add tap gesture to the title label.
+        if self.params?.actionHandler != nil {
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleAction))
+            self.addGestureRecognizer(tapGesture)
+        } else if self.params?.hasLink == true {
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openURL))
             self.titleLabel.isUserInteractionEnabled = true
             self.titleLabel.addGestureRecognizer(tapGesture)
@@ -218,5 +223,15 @@ public class SBUCardView: SBUView {
         guard let url = URL(string: urlString) else { return }
         guard UIApplication.shared.canOpenURL(url) else { return }
         url.open()
+    }
+    
+    /// Handle Action with (``SBUCardViewParams/actionHandler``)
+    /// - Since: 3.7.0
+    @objc
+    public func handleAction() {
+        if let actionHandler = self.params?.actionHandler {
+            actionHandler()
+            return
+        }
     }
 }

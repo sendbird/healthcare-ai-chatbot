@@ -58,14 +58,17 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
     /// ``SBUCardListView`` instance.
     /// - Since: 3.7.0
     public private(set) var cardListView: SBUCardListView?
+    
+    /// - Since: 3.7.0
+    public var cardSelectHandler: ((_ text: String) -> Void)?
     // MARK: - Button
     
     /// ``SBUButtonView`` instance.
     /// - Since: 3.7.0
     public private(set) var buttonView: SBUButtonView?
     public private(set) var shouldHideButton: Bool = true
-    
     public private(set) var buttonClicked: Bool = false
+    public var buttonSelectHandler: (() -> Void)?
     // MARK: - View Lifecycle
     open override func setupViews() {
         super.setupViews()
@@ -146,7 +149,6 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
         self.useThreadInfo = configuration.useThreadInfo
         self.shouldHideQuickReply = configuration.shouldHideQuickReply
         self.shouldHideButton = configuration.shouldHideButton
-        self.channel = configuration.channel
         
         // Configure Content base message cell
         super.configure(with: configuration)
@@ -197,17 +199,7 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
                         description: "If you want to talk to a doctor, please click the button!",
                         actionHandler: {
                             self.buttonClicked = true
-
-                            // Invite a doctor
-                            self.channel?.inviteUserId("healthcare-doctor", completionHandler: { error in
-                                print("Error: \(error?.localizedDescription ?? "No error")")
-                            })
-
-                            // Ban the bot
-                            self.channel?.banUser(userId: AppDelegate.botId, seconds: 0, description: "Bot banned", completionHandler: { error in
-                                print("Error: \(error?.localizedDescription ?? "No error")")
-                            })
-
+                            self.buttonSelectHandler!()
                             self.layoutIfNeeded()
                         },
                         enableButton: !shouldHideButton && !self.buttonClicked,
@@ -218,8 +210,10 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
                     // Replace the message text with the custom text
                     customText = "Your appointment has been successfully scheduled. Here are the details"
                     SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
-                        guard let json = try? JSON(parseJSON: messageData) else { return [] }
-                        print(json)
+                        guard
+                            let data = messageData.data(using: .utf8),
+                            let json = try? JSON(data: data)
+                        else { return [] }
                         // Convert the single order object into a SBUCardViewParams object
                         let orderParams = SBUCardViewParams(
                             imageURL: nil,
@@ -239,15 +233,20 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
                     customText = "Here are the available appointment date and time."
                     disableWebview = true
                     SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
-                        guard let json = try? JSON(parseJSON: messageData) else { return [] }
-
+                        guard
+                            let data = messageData.data(using: .utf8),
+                            let json = try? JSON(data: data)
+                        else { return [] }
                         return json.arrayValue.compactMap { item in
                             return SBUCardViewParams(
                                     imageURL: nil,
                                     title: "\(item["doctor"].stringValue)",
                                     subtitle: "Date: \(item["recommend_date"].stringValue)",
                                     description: nil,
-                                    link: nil
+                                    link: nil,
+                                    actionHandler: {
+                                        self.cardSelectHandler!("Please reserve a reservation with \(item["doctor"].stringValue), \(item["recommend_date"].stringValue)")
+                                    }
                             )
                         }
                     }
@@ -303,7 +302,7 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
             groupPosition: groupPosition,
             receiptState: receiptState ?? .none,
             useReaction: false,
-            withTextView: true, channel: self.channel!
+            withTextView: true
         )
         self.configure(with: configuration)
     }
@@ -326,7 +325,7 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
             groupPosition: groupPosition,
             receiptState: receiptState ?? .none,
             useReaction: self.useReaction,
-            withTextView: withTextView, channel: self.channel!
+            withTextView: withTextView
         )
         self.configure(with: configuration)
     }
