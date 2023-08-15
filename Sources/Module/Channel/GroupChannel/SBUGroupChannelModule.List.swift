@@ -424,8 +424,7 @@ extension SBUGroupChannelModule {
                         withTextView: true,
                         joinedAt: self.channel?.joinedAt ?? 0,
                         shouldHideQuickReply: !isLatestUserMessage,
-                        shouldHideButton: !isLatestMessage,
-                        channel: channel
+                        shouldHideButton: !isLatestMessage
                     )
                     userMessageCell.configure(with: configuration)
                     userMessageCell.configure(highlightInfo: self.highlightInfo)
@@ -434,6 +433,20 @@ extension SBUGroupChannelModule {
                     userMessageCell.quickReplySelectHandler = { optionView in
                         guard let text = optionView.text else { return }
                         self.delegate?.groupChannelModule(self, didSelectQuickReplyOption: text)
+                    }
+                    userMessageCell.cardSelectHandler = { text in
+                        self.delegate?.groupChannelModule(self, didSelectQuickReplyOption: text)
+                    }
+                    userMessageCell.buttonSelectHandler = {
+                        // Invite a doctor
+                        self.channel?.inviteUserId("healthcare-doctor", completionHandler: { error in
+                            print("Error: \(error?.localizedDescription ?? "No error")")
+                        })
+
+                        // Ban the bot
+                        self.channel?.banUser(userId: AppDelegate.botId, seconds: 0, description: "Bot banned", completionHandler: { error in
+                            print("Error: \(error?.localizedDescription ?? "No error")")
+                        })
                     }
                     self.setMessageCellAnimation(userMessageCell, message: userMessage, indexPath: indexPath)
                     self.setMessageCellGestures(userMessageCell, message: userMessage, indexPath: indexPath)

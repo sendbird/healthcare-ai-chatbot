@@ -520,8 +520,7 @@ extension SBUMessageThreadModule {
                         receiptState: .notUsed,
                         useReaction: useReaction,
                         withTextView: true,
-                        isThreadMessage: true,
-                        channel: channel!
+                        isThreadMessage: true
                     )
                     userMessageCell.configure(with: configuration)
                     self.setMessageCellGestures(userMessageCell, message: userMessage, indexPath: indexPath)

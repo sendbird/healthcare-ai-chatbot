@@ -31,6 +31,10 @@ public struct SBUCardViewParams {
     /// - Since: 3.7.0
     public var hasLink: Bool { link != nil }
     
+    /// The action handler for the button click
+    /// - Since: 3.7.0
+    public let actionHandler: (() -> Void)?
+    
     /// Initializes ``SBUCardViewParams``.
     /// - Since: 3.7.0
     public init(
@@ -38,12 +42,14 @@ public struct SBUCardViewParams {
         title: String? = nil,
         subtitle: String? = nil,
         description: String? = nil,
-        link: String? = nil
+        link: String? = nil,
+        actionHandler: (() -> Void)? = nil
     ) {
         self.imageURL = imageURL
         self.title = title
         self.subtitle = subtitle
         self.description = description
         self.link = link
+        self.actionHandler = actionHandler
     }
 }
