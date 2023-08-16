@@ -54,7 +54,7 @@ static let applicationId: String = <#applicationId: String#>
 This demo app demonstrates the implementation of the AI Chatbot tailored for healthcare. It includes functionalities such as ***recommend date to reservation, reservation, Talking to the doctor.*** By leveraging ChatGPT’s new feature [Function Calling](https://openai.com/blog/function-calling-and-other-api-updates), the Chatbot now can make an API request to the 3rd party with a predefined Function Calling based on customer’s enquiry. Then it parses and presents the response in a conversational manner, enhancing overall customer experience.
 
 ## How it works
-<img width="2533" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/e20eb8da-9f62-4c03-b95f-2d1a3f9daef7">
+<img width="2600" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/3db4a6d4-2e34-4368-800d-cfb9d9f99d08">
 
 1. A customer sends a message containing a specific request on the client app to the Sendbird server.
 2. The Sendbird server then delivers the message to Chat GPT.
@@ -253,7 +253,7 @@ let data = """
 ```
 
 ## Welcome Message and Quick Replies
-<img width="387" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/40b3d20d-f8e6-44b4-889f-e7b39758b901">
+<img width="382" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/96622af7-1b2f-4c0a-a523-7ce1ec92e2d7">
 
 The following is a prompt sample of `first_message_data` in `json` format. The object contains two pieces of information: `message` and `data`. The string value in message will act as a Welcome Message while values in `data` represent the Quick Replies that the customer can choose from. The keys and values in the prompt will be stored in the `channelCreateParams.data` property in `string`.
 
