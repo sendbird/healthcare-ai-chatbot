@@ -6,7 +6,7 @@
 [![Commercial License](https://img.shields.io/badge/license-Commercial-green.svg)](https://github.com/sendbird/sendbird-uikit-ios/blob/main/LICENSE.md)
 
 This demo app showcases what AI Chatbots with Sendbird can do to enhance the customer experience of your service with more personalized and comprehensive customer support.
-Utilizing OpenAI’s GPT3.5 and its Function Calling functionality, ***Sendbird helps you build a chatbot that can go extra miles: providing informative responses with the data source you feed to the bot, accommodating customer’s requests such as retrieving reservation information and making a reservation and even talking to the doctor.*** Create your own next generation AI Chatbot by following the tutorial below.
+Utilizing OpenAI’s GPT3.5 and its Function Calling functionality, ***Sendbird helps you build a chatbot that can go extra miles: providing informative responses with the data source you feed to the bot, accommodating customer’s requests such as retrieving appointment information and making an appointment and even talking to the doctor.*** Create your own next generation AI Chatbot by following the tutorial below.
 
 ![healthcare](https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/04d71cea-8044-4b70-9cd6-9de3e2d95f5b)
 
@@ -87,7 +87,7 @@ And `ai_attrs` value will be stored in the `messageParams.data` property in `str
    - `description`: the description about the Function Calling request. It can detail when to call the function and what action to be taken. Chat GPT will use this information to analyze the customer’s message and determine whether to call the function or not.
    - `parameter`: This contains a list of arguments required for the Function Calling.
 
-Mock API Server Information: [Link](https://documenter.getpostman.com/view/21816899/2s9Xy3qqFd)
+Mock API Server Information: [Link](https://documenter.getpostman.com/view/21816899/2s9Xy6rVbP)
 
 [SBUBaseChannelViewModel.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/ViewModel/Channel/SBUBaseChannelViewModel.swift#L221)
 ```swift
@@ -99,15 +99,15 @@ let data = """
                     "request": {
                         "headers": {},
                         "method": "GET",
-                        "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/get_reservation"
+                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/appointments"
                     },
                     "quick_replies": [
                         "I don't feel well.",
                         "Can I check my previous medical records?",
                         "Can I talk to a doctor?"
                     ],
-                    "name": "get_reservation",
-                    "description": "Check the patient's reservation information through the patient ID",
+                    "name": "get_appointments",
+                    "description": "Check the patient's appointment information through the patient ID",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -123,15 +123,15 @@ let data = """
                     "request": {
                         "headers": {},
                         "method": "GET",
-                        "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/get_medical_history"
+                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/medical_histories"
                     },
                     "quick_replies": [
                         "I don't feel well.",
-                        "Can I check my reservation information?",
+                        "Can I check my appointment information?",
                         "Can I talk to a doctor?"
                     ],
-                    "name": "get_medical_history",
-                    "description": "Check the patient's medical history through the patient's ID",
+                    "name": "get_medical_histories",
+                    "description": "Check the patient's medical histories through the patient's ID",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -147,14 +147,14 @@ let data = """
                     "request": {
                         "headers": {},
                         "method": "GET",
-                        "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/recommend_date"
+                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/dates/recommended"
                     },
                     "quick_replies": [
-                        "I want to make an reservation",
+                        "I want to make an appointment",
                         "I want to know other schedule later than this date"
                     ],
-                    "name": "recommend_date",
-                    "description": "Possible appointment dates and doctor information for your department, If the Preferred reservation date is not entered, it returns the earliest possible schedule after the current date.",
+                    "name": "get_recommend_date",
+                    "description": "Possible appointment dates and doctor information for your department, If the Preferred appointment date is not entered, it returns the earliest possible schedule after the current date.",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -162,9 +162,9 @@ let data = """
                                 "type": "string",
                                 "description": "the department in charge"
                             },
-                            "preferred_reservation_date": {
+                            "preferred_appointment_date": {
                                 "type": "string",
-                                "description": "Preferred reservation date"
+                                "description": "Preferred appointment date"
                             }
                         },
                         "required": ["department"]
@@ -174,13 +174,13 @@ let data = """
                     "request": {
                         "headers": {},
                         "method": "GET",
-                        "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/check_availability"
+                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/dates/availability"
                     },
                     "quick_replies": [
-                        "I want to make an reservation",
+                        "I want to make an appointment",
                         "Can I talk to a doctor?"
                     ],
-                    "name": "check_availability",
+                    "name": "check_dates_availability",
                     "description": "Confirmation of availability with desired date. If the doctor information is not entered, if there is a doctor available on the day, it is automatically assigned.",
                     "parameters": {
                         "type": "object",
@@ -189,30 +189,30 @@ let data = """
                                 "type": "string",
                                 "description": "the department in charge"
                             },
-                            "preferred_reservation_date": {
+                            "preferred_appointment_date": {
                                 "type": "string",
-                                "description": "Preferred reservation date"
+                                "description": "Preferred appointment date"
                             },
                             "preferred_doctor_name": {
                                 "type": "string",
                                 "description": "Doctor Name"
                             }
                         },
-                        "required": ["department", "preferred_reservation_date"]
+                        "required": ["department", "preferred_appointment_date"]
                     }
                 },
                 {
                     "request": {
                         "headers": {},
                         "method": "POST",
-                        "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/reservation"
+                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/appointments"
                     },
                     "quick_replies": [
                         "Thank you",
                         "Can I talk to a doctor?"
                     ],
-                    "name": "reservation",
-                    "description": "Proceed with the reservation. If the doctor information is not entered, if there is a doctor available on the day, it is automatically assigned.If there is no available date, return recommend another date.",
+                    "name": "post_appointments",
+                    "description": "Proceed with the appointment. If the doctor information is not entered, if there is a doctor available on the day, it is automatically assigned.If there is no available date, return recommend another date.",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -220,31 +220,31 @@ let data = """
                                 "type": "string",
                                 "description": "the department in charge"
                             },
-                            "preferred_reservation_date": {
+                            "preferred_appointment_date": {
                                 "type": "string",
-                                "description": "Preferred reservation date"
+                                "description": "Preferred appointment date"
                             },
                             "preferred_doctor_name": {
                                 "type": "string",
                                 "description": "Doctor Name"
                             }
                         },
-                        "required": ["department", "preferred_reservation_date"]
+                        "required": ["department", "preferred_appointment_date"]
                     }
                 },
                 {
                     "request": {
                         "headers": {},
                         "method": "GET",
-                        "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/check_availability_of_doctor_for_consultation"
+                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/doctors/availability"
                     },
-                    "name": "check_availability_of_doctor_for_consultation",
+                    "name": "check_doctors_availability",
                     "description": "Check if it's currently possible to talk to the doctor.",
                     "parameters": {
                         "type": "object",
                         "properties": {},
                         "required": []
-                    }
+                    }        
                 }
             ]
         }
@@ -272,10 +272,10 @@ let data: [String: Any] = [
         ],
         [
             "data": [
-                "options": [
+                "quick_replies": [
                     "I don't feel well.",
                     "Can I check my previous medical records?",
-                    "Can I check my reservation information?"
+                    "Can I check my appointment information?"
                 ]
             ],
             "message": "I'm still learning but I'm here 24/7 to answer your question or connect you with the right person to help."
@@ -322,54 +322,54 @@ if functionResponse.type != .null {
    if statusCode == 200 {
        if ... {
          ...
-       } else if endpoint.contains("/reservation") {
-           // Replace the message text with the custom text
-           customText = "Your appointment has been successfully scheduled. Here are the details"
-           SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
-               guard
-                   let data = messageData.data(using: .utf8),
-                   let json = try? JSON(data: data)
-               else { return [] }
-               // Convert the single order object into a SBUCardViewParams object
-               let orderParams = SBUCardViewParams(
-                   imageURL: nil,
-                   title: "Date: \(json["appointmentDetails"]["date"].stringValue):\(json["appointmentDetails"]["time"].stringValue)",
-                   subtitle: nil,
-                   description: "- ID: \(json["appointmentDetails"]["appointmentId"].stringValue)\n- Department: \(json["appointmentDetails"]["department"].stringValue)\n- Doctor: \(json["appointmentDetails"]["doctor"].stringValue)",
-                   link: nil
-               )
+        } else if endpoint.contains("/appointments") && response.stringValue.contains("appointmentDetails") {
+            // Replace the message text with the custom text
+            customText = "Your appointment has been successfully scheduled. Here are the details"
+            SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
+                guard
+                    let data = messageData.data(using: .utf8),
+                    let json = try? JSON(data: data)
+                else { return [] }
+                // Convert the single order object into a SBUCardViewParams object
+                let orderParams = SBUCardViewParams(
+                    imageURL: nil,
+                    title: "Date: \(json["appointmentDetails"]["date"].stringValue):\(json["appointmentDetails"]["time"].stringValue)",
+                    subtitle: nil,
+                    description: "- ID: \(json["appointmentDetails"]["appointmentId"].stringValue)\n- Department: \(json["appointmentDetails"]["department"].stringValue)\n- Doctor: \(json["appointmentDetails"]["doctor"].stringValue)",
+                    link: nil
+                )
 
-               return [orderParams]
-           }
-           if let items = try?SBUGlobalCustomParams.cardViewParamsCollectionBuilder?(response.rawString()!){
-               self.addCardListView(with: items)
-           }
-       } else if endpoint.contains("/recommend_date") {
-           // Replace the message text with the custom text
-           customText = "Here are the available appointment date and time."
-           disableWebview = true
-           SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
-               guard
-                   let data = messageData.data(using: .utf8),
-                   let json = try? JSON(data: data)
-               else { return [] }
-               return json.arrayValue.compactMap { item in
-                   return SBUCardViewParams(
-                           imageURL: nil,
-                           title: "\(item["doctor"].stringValue)",
-                           subtitle: "Date: \(item["recommend_date"].stringValue)",
-                           description: nil,
-                           link: nil,
-                           actionHandler: {
-                               self.cardSelectHandler!("Please reserve a reservation with \(item["doctor"].stringValue), \(item["recommend_date"].stringValue)")
-                           }
-                   )
-               }
-           }
-           if let items = try?SBUGlobalCustomParams.cardViewParamsCollectionBuilder?(response.rawString()!){
-               self.addCardListView(with: items)
-           }
-       }
+                return [orderParams]
+            }
+            if let items = try?SBUGlobalCustomParams.cardViewParamsCollectionBuilder?(response.rawString()!){
+                self.addCardListView(with: items)
+            }
+        } else if endpoint.contains("/dates/recommended") {
+            // Replace the message text with the custom text
+            customText = "Here are the available appointment date and time."
+            disableWebview = true
+            SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
+                guard
+                    let data = messageData.data(using: .utf8),
+                    let json = try? JSON(data: data)
+                else { return [] }
+                return json.arrayValue.compactMap { item in
+                    return SBUCardViewParams(
+                            imageURL: nil,
+                            title: "\(item["doctor"].stringValue)",
+                            subtitle: "Date: \(item["recommend_date"].stringValue)",
+                            description: nil,
+                            link: nil,
+                            actionHandler: {
+                                self.cardSelectHandler!("Please reserve a reservation with \(item["doctor"].stringValue), \(item["recommend_date"].stringValue)")
+                            }
+                    )
+                }
+            }
+            if let items = try?SBUGlobalCustomParams.cardViewParamsCollectionBuilder?(response.rawString()!){
+                self.addCardListView(with: items)
+            }
+        }
    }
 } else {
    self.cardListView = nil
@@ -418,22 +418,22 @@ if functionResponse.type != .null {
     let response = functionResponse["response"]
 
     if statusCode == 200 {
-        if endpoint.contains("/check_availability_of_doctor_for_consultation") {
-           // Replace the message text with the custom text
-           customText = "Yes, you can talk to a doctor. "
-           
-           let buttonParams = SBUButtonViewParams(
-               actionText: "Invite a Doctor",
-               description: "If you want to talk to a doctor, please click the button!",
-               actionHandler: {
-                   self.buttonClicked = true
-                   self.buttonSelectHandler!()
-                   self.layoutIfNeeded()
-               },
-               enableButton: !shouldHideButton && !self.buttonClicked,
-               disableButtonText: "In Progress"
-           )
-           self.updateButtonView(with: buttonParams)
+        if endpoint.contains("/doctors/availability") {
+            // Replace the message text with the custom text
+            customText = "Yes, you can talk to a doctor. "
+            
+            let buttonParams = SBUButtonViewParams(
+                actionText: "Invite a Doctor",
+                description: "If you want to talk to a doctor, please click the button!",
+                actionHandler: {
+                    self.buttonClicked = true
+                    self.buttonSelectHandler!()
+                    self.layoutIfNeeded()
+                },
+                enableButton: !shouldHideButton && !self.buttonClicked,
+                disableButtonText: "In Progress"
+            )
+            self.updateButtonView(with: buttonParams)
         } 
         ...
     }
