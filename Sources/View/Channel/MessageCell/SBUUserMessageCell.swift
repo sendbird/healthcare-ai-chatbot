@@ -241,11 +241,11 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
                             return SBUCardViewParams(
                                     imageURL: nil,
                                     title: "\(item["doctor"].stringValue)",
-                                    subtitle: "Date: \(item["recommend_date"].stringValue)",
+                                    subtitle: "Date: \(item["recommended_date"].stringValue)",
                                     description: nil,
                                     link: nil,
                                     actionHandler: {
-                                        self.cardSelectHandler!("Please reserve a reservation with \(item["doctor"].stringValue), \(item["recommend_date"].stringValue)")
+                                        self.cardSelectHandler!("Please reserve a reservation with \(item["doctor"].stringValue), \(item["recommended_date"].stringValue)")
                                     }
                             )
                         }
