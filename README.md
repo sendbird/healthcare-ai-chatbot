@@ -54,7 +54,7 @@ static let applicationId: String = <#applicationId: String#>
 This demo app demonstrates the implementation of the AI Chatbot tailored for healthcare. It includes functionalities such as ***recommend date to reservation, reservation, Talking to the doctor.*** By leveraging ChatGPT’s new feature [Function Calling](https://openai.com/blog/function-calling-and-other-api-updates), the Chatbot now can make an API request to the 3rd party with a predefined Function Calling based on customer’s enquiry. Then it parses and presents the response in a conversational manner, enhancing overall customer experience.
 
 ## How it works
-<img width="2600" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/3db4a6d4-2e34-4368-800d-cfb9d9f99d08">
+<img width="2593" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/0627f6f0-0dd1-4118-a268-45f71083e8c4">
 
 1. A customer sends a message containing a specific request on the client app to the Sendbird server.
 2. The Sendbird server then delivers the message to Chat GPT.
