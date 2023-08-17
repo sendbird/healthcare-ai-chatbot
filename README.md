@@ -361,7 +361,7 @@ if functionResponse.type != .null {
                             description: nil,
                             link: nil,
                             actionHandler: {
-                                self.cardSelectHandler!("Please reserve a reservation with \(item["doctor"].stringValue), \(item["recommend_date"].stringValue)")
+                                self.cardSelectHandler!("Please make an appointment with \(item["doctor"].stringValue), \(item["recommend_date"].stringValue)")
                             }
                     )
                 }
