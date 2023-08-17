@@ -226,15 +226,15 @@ open class SBUBaseChannelViewModel: NSObject {
                             "request": {
                                 "headers": {},
                                 "method": "GET",
-                                "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/get_reservation"
+                                "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/appointments"
                             },
                             "quick_replies": [
                                 "I don't feel well.",
                                 "Can I check my previous medical records?",
                                 "Can I talk to a doctor?"
                             ],
-                            "name": "get_reservation",
-                            "description": "Check the patient's reservation information through the patient ID",
+                            "name": "get_appointments",
+                            "description": "Check the patient's appointment information through the patient ID",
                             "parameters": {
                                 "type": "object",
                                 "properties": {
@@ -250,15 +250,15 @@ open class SBUBaseChannelViewModel: NSObject {
                             "request": {
                                 "headers": {},
                                 "method": "GET",
-                                "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/get_medical_history"
+                                "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/medical_histories"
                             },
                             "quick_replies": [
                                 "I don't feel well.",
-                                "Can I check my reservation information?",
+                                "Can I check my appointment information?",
                                 "Can I talk to a doctor?"
                             ],
-                            "name": "get_medical_history",
-                            "description": "Check the patient's medical history through the patient's ID",
+                            "name": "get_medical_histories",
+                            "description": "Check the patient's medical histories through the patient's ID",
                             "parameters": {
                                 "type": "object",
                                 "properties": {
@@ -274,14 +274,14 @@ open class SBUBaseChannelViewModel: NSObject {
                             "request": {
                                 "headers": {},
                                 "method": "GET",
-                                "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/recommend_date"
+                                "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/dates/recommended"
                             },
                             "quick_replies": [
-                                "I want to make an reservation",
+                                "I want to make an appointment",
                                 "I want to know other schedule later than this date"
                             ],
-                            "name": "recommend_date",
-                            "description": "Possible appointment dates and doctor information for your department, If the Preferred reservation date is not entered, it returns the earliest possible schedule after the current date.",
+                            "name": "get_recommend_date",
+                            "description": "Possible appointment dates and doctor information for your department, If the Preferred appointment date is not entered, it returns the earliest possible schedule after the current date.",
                             "parameters": {
                                 "type": "object",
                                 "properties": {
@@ -289,9 +289,9 @@ open class SBUBaseChannelViewModel: NSObject {
                                         "type": "string",
                                         "description": "the department in charge"
                                     },
-                                    "preferred_reservation_date": {
+                                    "preferred_appointment_date": {
                                         "type": "string",
-                                        "description": "Preferred reservation date"
+                                        "description": "Preferred appointment date"
                                     }
                                 },
                                 "required": ["department"]
@@ -301,13 +301,13 @@ open class SBUBaseChannelViewModel: NSObject {
                             "request": {
                                 "headers": {},
                                 "method": "GET",
-                                "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/check_availability"
+                                "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/dates/availability"
                             },
                             "quick_replies": [
-                                "I want to make an reservation",
+                                "I want to make an appointment",
                                 "Can I talk to a doctor?"
                             ],
-                            "name": "check_availability",
+                            "name": "check_dates_availability",
                             "description": "Confirmation of availability with desired date. If the doctor information is not entered, if there is a doctor available on the day, it is automatically assigned.",
                             "parameters": {
                                 "type": "object",
@@ -316,30 +316,30 @@ open class SBUBaseChannelViewModel: NSObject {
                                         "type": "string",
                                         "description": "the department in charge"
                                     },
-                                    "preferred_reservation_date": {
+                                    "preferred_appointment_date": {
                                         "type": "string",
-                                        "description": "Preferred reservation date"
+                                        "description": "Preferred appointment date"
                                     },
                                     "preferred_doctor_name": {
                                         "type": "string",
                                         "description": "Doctor Name"
                                     }
                                 },
-                                "required": ["department", "preferred_reservation_date"]
+                                "required": ["department", "preferred_appointment_date"]
                             }
                         },
                         {
                             "request": {
                                 "headers": {},
                                 "method": "POST",
-                                "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/reservation"
+                                "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/appointments"
                             },
                             "quick_replies": [
                                 "Thank you",
                                 "Can I talk to a doctor?"
                             ],
-                            "name": "reservation",
-                            "description": "Proceed with the reservation. If the doctor information is not entered, if there is a doctor available on the day, it is automatically assigned.If there is no available date, return recommend another date.",
+                            "name": "post_appointments",
+                            "description": "Proceed with the appointment. If the doctor information is not entered, if there is a doctor available on the day, it is automatically assigned.If there is no available date, return recommend another date.",
                             "parameters": {
                                 "type": "object",
                                 "properties": {
@@ -347,25 +347,25 @@ open class SBUBaseChannelViewModel: NSObject {
                                         "type": "string",
                                         "description": "the department in charge"
                                     },
-                                    "preferred_reservation_date": {
+                                    "preferred_appointment_date": {
                                         "type": "string",
-                                        "description": "Preferred reservation date"
+                                        "description": "Preferred appointment date"
                                     },
                                     "preferred_doctor_name": {
                                         "type": "string",
                                         "description": "Doctor Name"
                                     }
                                 },
-                                "required": ["department", "preferred_reservation_date"]
+                                "required": ["department", "preferred_appointment_date"]
                             }
                         },
                         {
                             "request": {
                                 "headers": {},
                                 "method": "GET",
-                                "url": "https://9f306185-0c00-410f-a0d1-96e8cfbf5f2f.mock.pstmn.io/check_availability_of_doctor_for_consultation"
+                                "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/doctors/availability"
                             },
-                            "name": "check_availability_of_doctor_for_consultation",
+                            "name": "check_doctors_availability",
                             "description": "Check if it's currently possible to talk to the doctor.",
                             "parameters": {
                                 "type": "object",

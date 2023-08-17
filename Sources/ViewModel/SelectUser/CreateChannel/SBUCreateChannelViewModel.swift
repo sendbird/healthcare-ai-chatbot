@@ -228,10 +228,10 @@ open class SBUCreateChannelViewModel {
                 ],
                 [
                     "data": [
-                        "options": [
+                        "quick_replies": [
                             "I don't feel well.",
                             "Can I check my previous medical records?",
-                            "Can I check my reservation information?"
+                            "Can I check my appointment information?"
                         ]
                     ],
                     "message": "I'm still learning but I'm here 24/7 to answer your question or connect you with the right person to help."

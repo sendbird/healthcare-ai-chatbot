@@ -190,7 +190,7 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
             let response = functionResponse["response"]
 
             if statusCode == 200 {
-                if endpoint.contains("/check_availability_of_doctor_for_consultation") {
+                if endpoint.contains("/doctors/availability") {
                     // Replace the message text with the custom text
                     customText = "Yes, you can talk to a doctor. "
                     
@@ -206,7 +206,7 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
                         disableButtonText: "In Progress"
                     )
                     self.updateButtonView(with: buttonParams)
-                } else if endpoint.contains("/reservation") {
+                } else if endpoint.contains("/appointments") && response.stringValue.contains("appointmentDetails") {
                     // Replace the message text with the custom text
                     customText = "Your appointment has been successfully scheduled. Here are the details"
                     SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
@@ -228,7 +228,7 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
                     if let items = try?SBUGlobalCustomParams.cardViewParamsCollectionBuilder?(response.rawString()!){
                         self.addCardListView(with: items)
                     }
-                } else if endpoint.contains("/recommend_date") {
+                } else if endpoint.contains("/dates/recommended") {
                     // Replace the message text with the custom text
                     customText = "Here are the available appointment date and time."
                     disableWebview = true
@@ -241,11 +241,11 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
                             return SBUCardViewParams(
                                     imageURL: nil,
                                     title: "\(item["doctor"].stringValue)",
-                                    subtitle: "Date: \(item["recommend_date"].stringValue)",
+                                    subtitle: "Date: \(item["recommended_date"].stringValue)",
                                     description: nil,
                                     link: nil,
                                     actionHandler: {
-                                        self.cardSelectHandler!("Please reserve a reservation with \(item["doctor"].stringValue), \(item["recommend_date"].stringValue)")
+                                        self.cardSelectHandler!("Please reserve a reservation with \(item["doctor"].stringValue), \(item["recommended_date"].stringValue)")
                                     }
                             )
                         }
