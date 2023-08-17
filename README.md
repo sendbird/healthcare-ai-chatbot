@@ -51,7 +51,7 @@ static let applicationId: String = <#applicationId: String#>
 7. [Limitations](##limitations)
 
 ## Use case: Healthcare
-This demo app demonstrates the implementation of the AI Chatbot tailored for healthcare. It includes functionalities such as ***recommend date to reservation, reservation, Talking to the doctor.*** By leveraging ChatGPT’s new feature [Function Calling](https://openai.com/blog/function-calling-and-other-api-updates), the Chatbot now can make an API request to the 3rd party with a predefined Function Calling based on customer’s enquiry. Then it parses and presents the response in a conversational manner, enhancing overall customer experience.
+This demo app demonstrates the implementation of the AI Chatbot tailored for healthcare. It includes functionalities such as ***suggesting possible appointment dates, making an appointment, and talking to the doctor.*** By leveraging ChatGPT’s new feature [Function Calling](https://openai.com/blog/function-calling-and-other-api-updates), the Chatbot now can make an API request to the 3rd party with a predefined Function Calling based on customer’s enquiry. Then it parses and presents the response in a conversational manner, enhancing overall customer experience.
 
 ## How it works
 <img width="2593" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/0627f6f0-0dd1-4118-a268-45f71083e8c4">
