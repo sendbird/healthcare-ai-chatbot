@@ -76,6 +76,10 @@ To run the demo app, you must specify `System prompt`, `Function Calls`.
 `System prompt` defines the Persona of the ChatBot, informing users of the role the ChatBot plays. For this Healthcare AI ChatBot, it's designed to assist patients with initial symptom diagnosis and making appointments. The `System prompt` has been defined as follows:
 
 You can find this setting under Chat > AI Chatbot > Manage bots > Edit > Bot settings > Parameter settings > System prompt.
+
+- Input example
+  <img width="1000" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/91c319b6-cccb-4e06-a7ba-29341d4c0fcc">
+
 ```
 You are an AI assistant designed to handle and manage patient inquiries and appointments in a comprehensive hospital setting.
 
@@ -90,19 +94,29 @@ You are an AI assistant designed to handle and manage patient inquiries and appo
 
 ### Function Calls
 `Function Calls` allows you to define situations where the ChatBot needs to interface with external APIs. Within `Function Calls`, you need to enter definitions for the Function and Parameters to pass to GPT, and you can define the specs of the 3rd party API to obtain the actual data of the specified Function.
+
 You can find this setting under Chat > AI Chatbot > Settings > Function Calls. 
 
-Here is the example.
+- Example list of Function Calls
+  <img width="1000" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/77be8334-66f4-4b25-8911-f3ec62a5093a">
+
+- Input example
+  <img width="1000" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/b2e71269-5cba-4fb4-bc4d-6a0d340c2ca7">
 
 In addition, you can enhance user experience by streamlining the communication with a Welcome Message, Quick Replies and Button. Using Quick Replies can improve the clarity of your customer’s intention as they are presented with a list of predefined options determined by you.
 
 Mock API Server Information: [Link](https://documenter.getpostman.com/view/21816899/2s9Y5eMJvT)
 
 ## Welcome Message and Suggested Replies
-<img width="382" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/96622af7-1b2f-4c0a-a523-7ce1ec92e2d7">
+<img width="382" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/7202d855-f08c-46c0-ac04-4af0aedb4cae">
 
 The `Welcome Message` is the first message displayed to users by the chatbot. Along with the `Welcome Message`, you can also set up `Suggested Replies` from the Dashboard.
+
 You can find this setting under Chat > AI Chatbot > Manage bots > Edit > Bot settings > Default messages > Welcome message / Suggested replies.
+
+- Input example
+  <img width="1000" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/22d3ad2b-7d2b-4618-ab83-6e0c621bbe9a">
+
 
 ## UI Components
 ### CardView
