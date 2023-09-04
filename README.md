@@ -45,8 +45,9 @@ static let applicationId: String = <#applicationId: String#>
 1. [Use case: Healthcare](##use-case-healthcare)
 2. [How it works](##how-it-works)
 3. [Demo app settings](##demo-app-settings)
-4. [System Message and Function Calling](##system-message-and-function-calling)
-5. [Welcome Message and Quick Replies](##welcome-message-and-quick-replies)
+4. [System Message](###system-message)
+5. [Function Calls](###function-calls)
+5. [Welcome Message and Suggestions](##welcome-message-and-suggested-replies)
 6. [UI Components](##ui-components)
 7. [Limitations](##limitations)
 
@@ -69,229 +70,39 @@ This demo app demonstrates the implementation of the AI Chatbot tailored for hea
 ***Note***: Currently, calling a 3rd party function is an experimental feature, and some logics are handled on the client-side for convenience purposes. Due to this, the current version for iOS (3.7.0 beta) will see breaking changes in the future, especially for QuickReplyView and CardView. Also, the ad-hoc support from the server that goes into the demo may be discontinued at any time and will be replaced with a proper feature on Sendbird Dashboard in the future.
 
 ## Demo app settings
-To run the demo app, you must specify `functions` in `ai_attrs`. Each provides the AI Chatbot with directions on how to interpret a customer’s message and respond to it using the predefined functions.
+To run the demo app, you must specify `System prompt`, `Function Calls`.
+
+### System Message
+`System prompt` defines the Persona of the ChatBot, informing users of the role the ChatBot plays. For this Healthcare AI ChatBot, it's designed to assist patients with initial symptom diagnosis and making appointments. The `System prompt` has been defined as follows:
+
+You can find this setting under Chat > AI Chatbot > Manage bots > Edit > Bot settings > Parameter settings > System prompt.
+```
+You are an AI assistant designed to handle and manage patient inquiries and appointments in a comprehensive hospital setting.
+
+1. Available 24/7 to assist patients with their symptom descriptions and appointment requests.
+2. Patients may provide descriptions of their new symptoms and request for an analysis of their condition based on these symptoms.
+3. You have access to the patient's basic information and past medical history.
+4. After a patient has described their symptoms, you should recommend the most appropriate department for the patient's condition.
+5. Once the department has been recommended, ask the patient if they would like assistance in scheduling an appointment with the recommended department.
+6. Once an appointment is successfully made, you need to confirm the appointment details to the patient.
+7. Be prepared to provide continued assistance if the patient needs further help after the appointment has been made.
+```
+
+### Function Calls
+`Function Calls` allows you to define situations where the ChatBot needs to interface with external APIs. Within `Function Calls`, you need to enter definitions for the Function and Parameters to pass to GPT, and you can define the specs of the 3rd party API to obtain the actual data of the specified Function.
+You can find this setting under Chat > AI Chatbot > Settings > Function Calls. 
+
+Here is the example.
 
 In addition, you can enhance user experience by streamlining the communication with a Welcome Message, Quick Replies and Button. Using Quick Replies can improve the clarity of your customer’s intention as they are presented with a list of predefined options determined by you.
 
-## System Message and Function Calling
-The `functions` value in `ai_attrs` contains information related to Function Calling, which are a list of functions that Chat GPT can call and the 3rd party API information to send the Function Calling request to.
-And `ai_attrs` value will be stored in the `messageParams.data` property in `string`.
+Mock API Server Information: [Link](https://documenter.getpostman.com/view/21816899/2s9Y5eMJvT)
 
-`ai_attrs` 
- - `functions`: this contains information related to Function Calling, which are a list of functions that Chat GPT can call and the 3rd party API information to send the Function Calling request to.
-   - `request`: 3rd party API information
-      - `headers`: header for the api request
-     - `method`: a method for the API request, such as `GET`, `POST`, `PUT`, or `DELETE`
-     - `url`: the API request URL
-   - `name`: the name of the Function Calling request
-   - `description`: the description about the Function Calling request. It can detail when to call the function and what action to be taken. Chat GPT will use this information to analyze the customer’s message and determine whether to call the function or not.
-   - `parameter`: This contains a list of arguments required for the Function Calling.
-
-Mock API Server Information: [Link](https://documenter.getpostman.com/view/21816899/2s9Xy6rVbP)
-
-[SBUBaseChannelViewModel.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/ViewModel/Channel/SBUBaseChannelViewModel.swift#L221)
-```swift
-let data = """
-    {
-        "ai_attrs": {
-            "functions": [
-                {
-                    "request": {
-                        "headers": {},
-                        "method": "GET",
-                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/appointments"
-                    },
-                    "quick_replies": [
-                        "I don't feel well.",
-                        "Can I check my previous medical records?",
-                        "Can I talk to a doctor?"
-                    ],
-                    "name": "get_appointments",
-                    "description": "Check the patient's appointment information through the patient ID",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "patientId": {
-                                "type": "string",
-                                "description": "patient ID"
-                            }
-                        },
-                        "required": ["patientId"]
-                    }
-                },
-                {
-                    "request": {
-                        "headers": {},
-                        "method": "GET",
-                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/medical_histories"
-                    },
-                    "quick_replies": [
-                        "I don't feel well.",
-                        "Can I check my appointment information?",
-                        "Can I talk to a doctor?"
-                    ],
-                    "name": "get_medical_histories",
-                    "description": "Check the patient's medical histories through the patient's ID",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "patientId": {
-                                "type": "string",
-                                "description": "patient ID"
-                            }
-                        },
-                        "required": ["patientId"]
-                    }
-                },
-                {
-                    "request": {
-                        "headers": {},
-                        "method": "GET",
-                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/dates/recommended"
-                    },
-                    "quick_replies": [
-                        "I want to make an appointment",
-                        "I want to know other schedule later than this date"
-                    ],
-                    "name": "get_recommend_date",
-                    "description": "Possible appointment dates and doctor information for your department, If the Preferred appointment date is not entered, it returns the earliest possible schedule after the current date.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "department": {
-                                "type": "string",
-                                "description": "the department in charge"
-                            },
-                            "preferred_appointment_date": {
-                                "type": "string",
-                                "description": "Preferred appointment date"
-                            }
-                        },
-                        "required": ["department"]
-                    }
-                },
-                {
-                    "request": {
-                        "headers": {},
-                        "method": "GET",
-                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/dates/availability"
-                    },
-                    "quick_replies": [
-                        "I want to make an appointment",
-                        "Can I talk to a doctor?"
-                    ],
-                    "name": "check_dates_availability",
-                    "description": "Confirmation of availability with desired date. If the doctor information is not entered, if there is a doctor available on the day, it is automatically assigned.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "department": {
-                                "type": "string",
-                                "description": "the department in charge"
-                            },
-                            "preferred_appointment_date": {
-                                "type": "string",
-                                "description": "Preferred appointment date"
-                            },
-                            "preferred_doctor_name": {
-                                "type": "string",
-                                "description": "Doctor Name"
-                            }
-                        },
-                        "required": ["department", "preferred_appointment_date"]
-                    }
-                },
-                {
-                    "request": {
-                        "headers": {},
-                        "method": "POST",
-                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/appointments"
-                    },
-                    "quick_replies": [
-                        "Thank you",
-                        "Can I talk to a doctor?"
-                    ],
-                    "name": "post_appointments",
-                    "description": "Proceed with the appointment. If the doctor information is not entered, if there is a doctor available on the day, it is automatically assigned.If there is no available date, return recommend another date.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "department": {
-                                "type": "string",
-                                "description": "the department in charge"
-                            },
-                            "preferred_appointment_date": {
-                                "type": "string",
-                                "description": "Preferred appointment date"
-                            },
-                            "preferred_doctor_name": {
-                                "type": "string",
-                                "description": "Doctor Name"
-                            }
-                        },
-                        "required": ["department", "preferred_appointment_date"]
-                    }
-                },
-                {
-                    "request": {
-                        "headers": {},
-                        "method": "GET",
-                        "url": "https://156055a7-5e2a-4535-b572-772d6e46e686.mock.pstmn.io/doctors/availability"
-                    },
-                    "name": "check_doctors_availability",
-                    "description": "Check if it's currently possible to talk to the doctor.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {},
-                        "required": []
-                    }        
-                }
-            ]
-        }
-    }
-"""
-```
-
-## Welcome Message and Quick Replies
+## Welcome Message and Suggested Replies
 <img width="382" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/96622af7-1b2f-4c0a-a523-7ce1ec92e2d7">
 
-The following is a prompt sample of `first_message_data` in `json` format. The object contains two pieces of information: `message` and `data`. The string value in message will act as a Welcome Message while values in `data` represent the Quick Replies that the customer can choose from. The keys and values in the prompt will be stored in the `channelCreateParams.data` property in `string`.
-
-`first_message_data`
- - `data`: you can use Quick Replies as a preset of messages that a customer can choose from. These Quick Replies will be displayed with its own UI components. Use `option` for Quick Replies in the `data` object
-   - `options`: this contains a list of Quick Reply messages. A customer can choose a predefined item from the list, which enhances the clarity of the customer’s request and thus helps the AI Chatbot understand their intention.
- - `message`: this is a Welcome Message to greet a customer when they open a channel and initiate conversation with an AI ChatBot. 
-
-[SBUCreateChannelViewModel.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/ViewModel/SelectUser/CreateChannel/SBUCreateChannelViewModel.swift#L223)
-```swift
-let data: [String: Any] = [
-    "first_message_data": [
-        [
-            "data": [],
-            "message": "Hi I’m Healthcare ChatBot."
-        ],
-        [
-            "data": [
-                "quick_replies": [
-                    "I don't feel well.",
-                    "Can I check my previous medical records?",
-                    "Can I check my appointment information?"
-                ]
-            ],
-            "message": "I'm still learning but I'm here 24/7 to answer your question or connect you with the right person to help."
-        ]
-    ]
-]
-                
-do {
-    let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
-    if let jsonString = String(data: jsonData, encoding: .utf8) {
-        params.data = jsonString
-    }
-} catch {
-    print("Error while converting to JSON: \(error)")
-}
-```
+The `Welcome Message` is the first message displayed to users by the chatbot. Along with the `Welcome Message`, you can also set up `Suggested Replies` from the Dashboard.
+You can find this setting under Chat > AI Chatbot > Manage bots > Edit > Bot settings > Default messages > Welcome message / Suggested replies.
 
 ## UI Components
 ### CardView
@@ -305,24 +116,24 @@ The `data` in the response are displayed in a Card view. In the demo, informatio
   (If actionHandler is set, link is ignored.)
 - `actionHandler`: the action to be performed when the card is clicked
 
-[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L180)
+[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L175)
 ```swift
 // MARK: Card List
 if let cardListView = self.cardListView {
-   self.contentVStackView.removeArrangedSubview(cardListView)
+    self.contentVStackView.removeArrangedSubview(cardListView)
 }
 
-let functionResponse = json["function_response"]
+let functionResponse = json["function_calls"][0]
 
 if functionResponse.type != .null {
-   let statusCode = functionResponse["status_code"].intValue
-   let endpoint = functionResponse["endpoint"].stringValue
-   let response = functionResponse["response"]
+    let statusCode = functionResponse["status_code"].intValue
+    let functionName = functionResponse["name"].stringValue
+    let response = functionResponse["response_text"]
 
-   if statusCode == 200 {
-       if ... {
+    if statusCode == 200 {
+        if ... {
          ...
-        } else if endpoint.contains("/appointments") && response.stringValue.contains("appointmentDetails") {
+        } else if functionName.contains("post_appointments") {
             // Replace the message text with the custom text
             customText = "Your appointment has been successfully scheduled. Here are the details"
             SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
@@ -333,7 +144,7 @@ if functionResponse.type != .null {
                 // Convert the single order object into a SBUCardViewParams object
                 let orderParams = SBUCardViewParams(
                     imageURL: nil,
-                    title: "Date: \(json["appointmentDetails"]["date"].stringValue):\(json["appointmentDetails"]["time"].stringValue)",
+                    title: "Date: \(json["appointmentDetails"]["date"].stringValue) \(json["appointmentDetails"]["time"].stringValue)",
                     subtitle: nil,
                     description: "- ID: \(json["appointmentDetails"]["appointmentId"].stringValue)\n- Department: \(json["appointmentDetails"]["department"].stringValue)\n- Doctor: \(json["appointmentDetails"]["doctor"].stringValue)",
                     link: nil
@@ -344,9 +155,9 @@ if functionResponse.type != .null {
             if let items = try?SBUGlobalCustomParams.cardViewParamsCollectionBuilder?(response.rawString()!){
                 self.addCardListView(with: items)
             }
-        } else if endpoint.contains("/dates/recommended") {
+        } else if functionName.contains("get_recommend_date") {
             // Replace the message text with the custom text
-            customText = "Here are the available appointment date and time."
+            customText = "Here are the available appointment date and time. Click the card if you have a desired appointment."
             disableWebview = true
             SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
                 guard
@@ -357,11 +168,11 @@ if functionResponse.type != .null {
                     return SBUCardViewParams(
                             imageURL: nil,
                             title: "\(item["doctor"].stringValue)",
-                            subtitle: "Date: \(item["recommend_date"].stringValue)",
+                            subtitle: "Date: \(item["recommended_date"].stringValue)",
                             description: nil,
                             link: nil,
                             actionHandler: {
-                                self.cardSelectHandler!("Please make an appointment with \(item["doctor"].stringValue), \(item["recommend_date"].stringValue)")
+                                self.cardSelectHandler!("Please reserve a reservation with \(item["doctor"].stringValue), \(item["recommended_date"].stringValue)")
                             }
                     )
                 }
@@ -370,9 +181,9 @@ if functionResponse.type != .null {
                 self.addCardListView(with: items)
             }
         }
-   }
+    }
 } else {
-   self.cardListView = nil
+    self.cardListView = nil
 }
 
 ```
@@ -383,14 +194,14 @@ When the user clicks on the Quick Reply, the message is sent to the server.
 
 [SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L160)
 ```swift
-// MARK: Quick Reply        
+// MARK: Quick Reply
 if let quickReplyView = self.quickReplyView {
     quickReplyView.removeFromSuperview()
     self.quickReplyView = nil
 }
 
-if let replyOptions = message.quickReply?.options, !replyOptions.isEmpty {
-    self.updateQuickReplyView(with: replyOptions)
+if let quickReplies = json["quick_replies"].arrayObject as? [String], !quickReplies.isEmpty {
+    self.updateQuickReplyView(with: quickReplies)
 }
 ```
 
@@ -403,22 +214,22 @@ The following codes demonstrate how to set the view for Buttons. When the server
 - `enableButton`: whether the button is enabled or not
 - `disableButtonText`: the text to be displayed on the button when it is disabled
 
-[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L175)
+[SBUUserMessageCell.swift](https://github.com/sendbird/healthcare-ai-chatbot/blob/develop/Sources/View/Channel/MessageCell/SBUUserMessageCell.swift#L170)
 ```swift
 // MARK: ButtonView
 if let buttonView = self.buttonView {
     self.contentVStackView.removeArrangedSubview(buttonView)
 }
 
-let functionResponse = json["function_response"]
+let functionResponse = json["function_calls"][0]
 
 if functionResponse.type != .null {
     let statusCode = functionResponse["status_code"].intValue
-    let endpoint = functionResponse["endpoint"].stringValue
-    let response = functionResponse["response"]
+    let functionName = functionResponse["name"].stringValue
+    let response = functionResponse["response_text"]
 
     if statusCode == 200 {
-        if endpoint.contains("/doctors/availability") {
+        if functionName.contains("check_doctors_availability") {
             // Replace the message text with the custom text
             customText = "Yes, you can talk to a doctor. "
             
@@ -434,7 +245,7 @@ if functionResponse.type != .null {
                 disableButtonText: "In Progress"
             )
             self.updateButtonView(with: buttonParams)
-        } 
+        }
         ...
     }
 }

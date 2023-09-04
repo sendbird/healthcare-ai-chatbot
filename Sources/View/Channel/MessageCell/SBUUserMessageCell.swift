@@ -163,13 +163,8 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
             self.quickReplyView = nil
         }
 
-        // If the message.data has "quick_replies", update the quick reply view.
         if let quickReplies = json["quick_replies"].arrayObject as? [String], !quickReplies.isEmpty {
             self.updateQuickReplyView(with: quickReplies)
-        }
-        // If the message doesn't have "quick_replies" but has "options", update the quick reply view.
-        else if let replyOptions = json["options"].arrayObject as? [String], !replyOptions.isEmpty {
-            self.updateQuickReplyView(with: replyOptions)
         }
         
         // MARK: ButtonView
@@ -182,15 +177,15 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
             self.contentVStackView.removeArrangedSubview(cardListView)
         }
 
-        let functionResponse = json["function_response"]
+        let functionResponse = json["function_calls"][0]
 
         if functionResponse.type != .null {
             let statusCode = functionResponse["status_code"].intValue
-            let endpoint = functionResponse["endpoint"].stringValue
-            let response = functionResponse["response"]
+            let functionName = functionResponse["name"].stringValue
+            let response = functionResponse["response_text"]
 
             if statusCode == 200 {
-                if endpoint.contains("/doctors/availability") {
+                if functionName.contains("check_doctors_availability") {
                     // Replace the message text with the custom text
                     customText = "Yes, you can talk to a doctor. "
                     
@@ -206,7 +201,7 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
                         disableButtonText: "In Progress"
                     )
                     self.updateButtonView(with: buttonParams)
-                } else if endpoint.contains("/appointments") && response.stringValue.contains("appointmentDetails") {
+                } else if functionName.contains("post_appointments") {
                     // Replace the message text with the custom text
                     customText = "Your appointment has been successfully scheduled. Here are the details"
                     SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
@@ -217,7 +212,7 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
                         // Convert the single order object into a SBUCardViewParams object
                         let orderParams = SBUCardViewParams(
                             imageURL: nil,
-                            title: "Date: \(json["appointmentDetails"]["date"].stringValue):\(json["appointmentDetails"]["time"].stringValue)",
+                            title: "Date: \(json["appointmentDetails"]["date"].stringValue) \(json["appointmentDetails"]["time"].stringValue)",
                             subtitle: nil,
                             description: "- ID: \(json["appointmentDetails"]["appointmentId"].stringValue)\n- Department: \(json["appointmentDetails"]["department"].stringValue)\n- Doctor: \(json["appointmentDetails"]["doctor"].stringValue)",
                             link: nil
@@ -228,9 +223,9 @@ open class SBUUserMessageCell: SBUContentBaseMessageCell, SBUUserMessageTextView
                     if let items = try?SBUGlobalCustomParams.cardViewParamsCollectionBuilder?(response.rawString()!){
                         self.addCardListView(with: items)
                     }
-                } else if endpoint.contains("/dates/recommended") {
+                } else if functionName.contains("get_recommend_date") {
                     // Replace the message text with the custom text
-                    customText = "Here are the available appointment date and time."
+                    customText = "Here are the available appointment date and time. Click the card if you have a desired appointment."
                     disableWebview = true
                     SBUGlobalCustomParams.cardViewParamsCollectionBuilder = { messageData in
                         guard
