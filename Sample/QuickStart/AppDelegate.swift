@@ -10,8 +10,8 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-    static let botId: String = "healthcare-bot" // TODO: set your sendbird bot id
-    static let applicationId: String = "0CBB4019-8D0F-4918-B1F1-BB1531CCCF95" // TODO: set your application id
+    static let botId: String = <#botId: String#> // TODO: set your sendbird bot id
+    static let applicationId: String = <#applicationId: String#> // TODO: set your application id
     var window: UIWindow?
     
     var pendingNotificationPayload: NSDictionary?
