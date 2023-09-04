@@ -8,7 +8,7 @@
 This demo app showcases what AI Chatbots with Sendbird can do to enhance the customer experience of your service with more personalized and comprehensive customer support.
 Utilizing OpenAI’s GPT3.5 and its Function Calling functionality, ***Sendbird helps you build a chatbot that can go extra miles: providing informative responses with the data source you feed to the bot, accommodating customer’s requests such as retrieving appointment information and making an appointment and even talking to the doctor.*** Create your own next generation AI Chatbot by following the tutorial below.
 
-![healthcare](https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/86ffce09-4b00-4a3d-85e4-8c2327f90551)
+![healthcare](https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/fa99d8a0-9cee-44c3-9300-18889a37141f)
 
 ## Prerequisites
 1. [Sendbird Account](https://dashboard.sendbird.com/)
