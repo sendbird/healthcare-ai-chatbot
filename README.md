@@ -42,14 +42,14 @@ static let applicationId: String = <#applicationId: String#>
 ```
 
 ## Table of Contents
-1. [Use case: Healthcare](##use-case-healthcare)
-2. [How it works](##how-it-works)
-3. [Demo app settings](##demo-app-settings)
-4. [System Message](###system-message)
-5. [Function Calls](###function-calls)
-5. [Welcome Message and Suggestions](##welcome-message-and-suggested-replies)
-6. [UI Components](##ui-components)
-7. [Limitations](##limitations)
+1. [Use case: Healthcare](#use-case-healthcare)
+2. [How it works](#how-it-works)
+3. [Demo app settings](#demo-app-settings)
+4. [System Message](#system-message)
+5. [Function Calls](#function-calls)
+5. [Welcome Message and Suggestions](#welcome-message-and-suggested-replies)
+6. [UI Components](#ui-components)
+7. [Limitations](#limitations)
 
 ## Use case: Healthcare
 This demo app demonstrates the implementation of the AI Chatbot tailored for healthcare. It includes functionalities such as ***suggesting possible appointment dates, making an appointment, and talking to the doctor.*** By leveraging ChatGPT’s new feature [Function Calling](https://openai.com/blog/function-calling-and-other-api-updates), the Chatbot now can make an API request to the 3rd party with a predefined Function Calling based on customer’s enquiry. Then it parses and presents the response in a conversational manner, enhancing overall customer experience.
