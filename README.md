@@ -13,22 +13,7 @@ Utilizing OpenAI’s GPT3.5 and its Function Calling functionality, ***Sendbird 
 ## Prerequisites
 1. [Sendbird Account](https://dashboard.sendbird.com/)
 2. Application ID and ChatBot: Please refer to [Step1 ~ Step4](https://sendbird.com/developer/tutorials/create-an-ai-chatbot), In `Step3`, you can use the following `system_message` for the demo app.
-   - Healthcare `system_message` example
-    ```
-    You are an AI assistant designed to handle and manage patient inquiries and appointments in a comprehensive hospital setting.
-    
-   1. Available 24/7 to assist patients with their symptom descriptions and appointment requests.
-   2. Patients may provide descriptions of their new symptoms and request for an analysis of their condition based on these symptoms.
-   3. You have access to the patient's basic information and past medical history.
-   4. After a patient has described their symptoms, you should recommend the most appropriate department for the patient's condition.
-   5. Once the department has been recommended, ask the patient if they would like assistance in scheduling an appointment with the recommended department.
-   6. Once an appointment is successfully made, you need to confirm the appointment details to the patient.
-   7. Be prepared to provide continued assistance if the patient needs further help after the appointment has been made.
-   
-   And from now on, the person you're speaking to is named John Doe, and the patient ID is P12345.
-    ```
-    <img width="449" alt="image" src="https://github.com/sendbird/healthcare-ai-chatbot/assets/104121286/934e0b42-5475-44f4-a767-b472d4efe150">
-
+   - [Knowledgebase file for initial symptoms](https://github.com/sendbird/chat-ai-green-vertical-contents/blob/github-pages/healthcare_result_resize.txt)
 
 ## How to open the demo app
 1. Open Xcode Demo project
