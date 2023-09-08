@@ -55,7 +55,7 @@ This demo app demonstrates the implementation of the AI Chatbot tailored for hea
 ***Note***: Currently, calling a 3rd party function is an experimental feature, and some logics are handled on the client-side for convenience purposes. Due to this, the current version for iOS (3.7.0 beta) will see breaking changes in the future, especially for QuickReplyView and CardView. Also, the ad-hoc support from the server that goes into the demo may be discontinued at any time and will be replaced with a proper feature on Sendbird Dashboard in the future.
 
 ## Demo app settings
-To run the demo app, you must specify `System prompt`, `Function Calls`.
+To run the demo app, you must specify `System prompt` and `Function Calls`.
 
 ### System Message
 `System prompt` defines the Persona of the ChatBot, informing users of the role the ChatBot plays. For this Healthcare AI ChatBot, it's designed to assist patients with initial symptom diagnosis and making appointments. The `System prompt` has been defined as follows:
